@@ -17,6 +17,22 @@ session_start();
             <ul>
                 <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
                     <li><a href="profile.php">Profile (<?php echo htmlspecialchars($_SESSION["username"]); ?>)</a></li>
+                    <?php if($_SESSION["role"] === "Admin" || $_SESSION["role"] === "Editor in Chief"): ?>
+                        <li><a href="admin.php">User Management</a></li>
+                    <?php endif; ?>
+                    <?php if($_SESSION["role"] === "Author"): ?>
+                        <li><a href="submit_manuscript.php">Submit Manuscript</a></li>
+                        <li><a href="manuscript_status.php">Manuscript Status</a></li>
+                    <?php endif; ?>
+                    <?php
+                        $editor_roles = ["Editor in Chief", "Assistant Editor in Chief", "Section Editor"];
+                        if(in_array($_SESSION["role"], $editor_roles)):
+                    ?>
+                        <li><a href="editor_dashboard.php">Editor Dashboard</a></li>
+                    <?php endif; ?>
+                    <?php if($_SESSION["role"] === "Reviewer"): ?>
+                        <li><a href="reviewer_dashboard.php">Reviewer Dashboard</a></li>
+                    <?php endif; ?>
                     <li><a href="logout.php">Logout</a></li>
                 <?php else: ?>
                     <li><a href="login.php">Login</a></li>
