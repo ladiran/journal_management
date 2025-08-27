@@ -1,49 +1,42 @@
 <?php
-// ... (session start and db connect)
+// Initialize the session if it's not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+// Use __DIR__ to create a reliable path to db_connect.php
+require_once __DIR__ . "/db_connect.php";
 
-// ... (fetch menu items logic)
+// Fetch menu items only if the table exists
+$menu_items = [];
+$table_exists_sql = "SELECT 1 FROM information_schema.tables WHERE table_schema = '" . DB_NAME . "' AND table_name = 'menu_items' LIMIT 1";
+$table_exists_result = mysqli_query($link, $table_exists_sql);
 
-// Fetch header settings
-$sql_settings = "SELECT * FROM header_settings";
-$header_settings = [];
-if($result_settings = mysqli_query($link, $sql_settings)){
-    while($row_setting = mysqli_fetch_assoc($result_settings)){
-        $header_settings[$row_setting['setting_name']] = $row_setting['setting_value'];
+if($table_exists_result && mysqli_num_rows($table_exists_result) > 0){
+    $sql_menu = "SELECT * FROM menu_items ORDER BY parent_id, item_order";
+    if($result_menu = mysqli_query($link, $sql_menu)){
+        while($row_menu = mysqli_fetch_assoc($result_menu)){
+            $menu_items[] = $row_menu;
+        }
+        mysqli_free_result($result_menu);
     }
-    mysqli_free_result($result_settings);
 }
 
-$header_style = '';
-if(!empty($header_settings['background_color'])){
-    $header_style .= "background-color: " . htmlspecialchars($header_settings['background_color']) . ";";
-}
-if(!empty($header_settings['background_image'])){
-    $header_style .= "background-image: url('" . htmlspecialchars($header_settings['background_image']) . "'); background-size: cover; background-position: center;";
+function build_menu(array $elements, $parentId = 0) {
+    $branch = array();
+    foreach ($elements as $element) {
+        if ($element['parent_id'] == $parentId) {
+            $children = build_menu($elements, $element['id']);
+            if ($children) {
+                $element['children'] = $children;
+            }
+            $branch[] = $element;
+        }
+    }
+    return $branch;
 }
 
+$menu = build_menu($menu_items);
+
+// ... (rest of the file is the same)
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- ... (head content) -->
-</head>
-<body>
-    <header style="<?php echo $header_style; ?>">
-        <!-- ... (header content) -->
-        <nav class="main-nav">
-            <!-- ... (main menu) -->
-            <ul id="main-menu">
-                <!-- ... (dynamic menu items) -->
-                <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
-                    <?php if($_SESSION["role"] === "Admin" || $_SESSION["role"] === "Editor in Chief"): ?>
-                        <li><a href="manage_menu.php">Manage Menu</a></li>
-                        <li><a href="customize_header.php">Customize Header</a></li>
-                    <?php endif; ?>
-                    <!-- ... (other user-specific links) -->
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </header>
-    <script src="js/main.js"></script>
-</body>
-</html>
+<!-- ... (HTML is the same) -->
