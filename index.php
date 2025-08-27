@@ -1,55 +1,14 @@
-<?php
-// Initialize the session
-session_start();
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journal Management System</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <header>
-        <h1>Journal Management System</h1>
-        <nav>
-            <ul>
-                <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
-                    <li><a href="profile.php">Profile (<?php echo htmlspecialchars($_SESSION["username"]); ?>)</a></li>
-                    <?php if($_SESSION["role"] === "Admin" || $_SESSION["role"] === "Editor in Chief"): ?>
-                        <li><a href="admin.php">User Management</a></li>
-                    <?php endif; ?>
-                    <?php if($_SESSION["role"] === "Author"): ?>
-                        <li><a href="submit_manuscript.php">Submit Manuscript</a></li>
-                        <li><a href="manuscript_status.php">Manuscript Status</a></li>
-                    <?php endif; ?>
-                    <?php
-                        $editor_roles = ["Editor in Chief", "Assistant Editor in Chief", "Section Editor"];
-                        if(in_array($_SESSION["role"], $editor_roles)):
-                    ?>
-                        <li><a href="editor_dashboard.php">Editor Dashboard</a></li>
-                    <?php endif; ?>
-                    <?php if($_SESSION["role"] === "Reviewer"): ?>
-                        <li><a href="reviewer_dashboard.php">Reviewer Dashboard</a></li>
-                    <?php endif; ?>
-                    <li><a href="logout.php">Logout</a></li>
-                <?php else: ?>
-                    <li><a href="login.php">Login</a></li>
-                    <li><a href="register.php">Register</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </header>
+<?php require_once "php/header.php"; ?>
 
-    <main>
-        <section id="announcements">
-            <h2>Announcements</h2>
-            <p>Welcome to the new Journal Management System!</p>
-        </section>
+<main>
+    <section id="announcements">
+        <h2>Announcements</h2>
+        <p>Welcome to the new Journal Management System!</p>
+    </section>
 
-        <section id="published-manuscripts">
-            <h2>Published Manuscripts</h2>
+    <section id="published-manuscripts">
+        <h2>Published Manuscripts</h2>
+        <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
@@ -76,11 +35,8 @@ session_start();
                     </tr>
                 </tbody>
             </table>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
 
-    <footer>
-        <p>&copy; 2025 Journal Management System</p>
-    </footer>
-</body>
-</html>
+<?php require_once "php/footer.php"; ?>

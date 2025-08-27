@@ -1,37 +1,6 @@
-body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-}
+/* ... (General and Header Styles) ... */
 
-header {
-    background-color: #f2f2f2;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-header h1 {
-    margin: 0;
-}
-
-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-nav li {
-    display: inline-block;
-    margin-left: 20px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-}
-
+/* Main Content Styles */
 main {
     padding: 20px;
 }
@@ -40,8 +9,44 @@ section {
     margin-bottom: 20px;
 }
 
-footer {
-    background-color: #f2f2f2;
+/* Form Wrapper Styles */
+.wrapper {
+    width: 90%;
+    max-width: 500px; /* Max width for larger screens */
     padding: 20px;
-    text-align: center;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+
+/* Footer Styles */
+/* ... (Footer Styles) ... */
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    /* ... (Header Responsive Styles) ... */
+
+    .wrapper {
+        width: 100%;
+        padding: 10px;
+    }
+}
+/* ... (sr-only styles) ... */
